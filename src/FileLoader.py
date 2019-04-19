@@ -1,5 +1,6 @@
 import os
 import zipfile
+import json
 
 class FileLoader(object):
     # 文件解压的路径
@@ -72,7 +73,7 @@ class FileLoader(object):
         zip_file = zipfile.ZipFile(file_name)
 
         end = file_name.rfind('.')
-        start = file_name.rfind('/')
+        start = file_name.rfind('\\')
         if end == -1:
             end = file_name.__len__()
 
