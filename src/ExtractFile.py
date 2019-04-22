@@ -27,9 +27,11 @@ class ExtractFile:
         tags = {}
         fileLoader = FileLoader.FileLoader(self.file)
         fileLoader.read()
+        print('loader file', fileLoader.files)
         for file in fileLoader.files:
-            images = ImageLoader(file).handle()
-            for image in images.images:
+            imageLoader = ImageLoader(file)
+            imageLoader.handle()
+            for image in imageLoader.images:
                 img_64 = base64.b64encode(open(image, 'rb').read())
                 # 获取图片的标签
                 tags[image] = HttpClient().post(config.IMG_URL, {
@@ -40,10 +42,10 @@ class ExtractFile:
 
     def extract_img(self):
         img_64 = base64.b64encode(open(self.file, 'rb').read())
-        return json.dumps(HttpClient().post(config.IMG_URL, {
+        return HttpClient().post(config.IMG_URL, {
             "type": 1,
             "content": img_64.decode()
-        }))
+        })
 
     def extract_doc(self):
         fileTagLoader = WorldsToWord()

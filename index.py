@@ -5,8 +5,11 @@ import os
 from src import ExtractFile
 import base64
 import zipfile
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
+
 UPLOAD_FOLDER='upload'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -32,7 +35,7 @@ def api_upload():
         unix_time = int(time.time())
         new_filename = str(unix_time)+'.'+ext  # 修改了上传的文件名
         f.save(os.path.join(file_dir, new_filename))  #保存文件到upload目录
-        return ExtractFile.ExtractFile(str(file_dir) + '\\' + str(new_filename)).handle()
+        return ExtractFile.ExtractFile(str(file_dir) + '/' + str(new_filename)).handle()
     else:
         return jsonify({"errno": 1001, "errmsg": u"failed"})
 
