@@ -13,7 +13,7 @@ requests = "*"
 pdfminer-six = "*"
 chardet = "==3.0.4"
 textract = "*"
-python-poppler-qt5 = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.7"

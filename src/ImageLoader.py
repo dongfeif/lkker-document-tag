@@ -14,6 +14,7 @@ class ImageLoader:
         pass
 
     def handle(self):
+        print('是否是图片', self.file.endswith((".jpg", '.peg', '.png')))
         if self.file.endswith((".jpg", '.peg', '.png')):
             # 是否是图片
             self.images = [self.file]
