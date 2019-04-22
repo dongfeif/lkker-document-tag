@@ -28,24 +28,34 @@ class ExtractFile:
         fileLoader = FileLoader.FileLoader(self.file)
         fileLoader.read()
         for file in fileLoader.files:
-            images = ImageLoader(file).handle()
-            for image in images.images:
-                img_64 = base64.b64encode(open(image, 'rb').read())
-                # 获取图片的标签
-                tags[image] = HttpClient().post(config.IMG_URL, {
-                    "type": 1,
-                    "content": img_64.decode()
-                })
+            if file.endswith((".words", "xls", "ptx", "doc", "psx", "ppt")):
+                tags[file] = self.extract_doc(file)
+            elif file.endswith((".jpg", '.peg', '.png', '.jpeg')):
+                tags[file] = self.extract_img(file)
+            elif file.endswith((".pdf",)):
+                images = ImageLoader(file)
+                images.handle()
+                for image in images.images:
+                    img_64 = base64.b64encode(open(image, 'rb').read())
+                    # 获取图片的标签
+                    tags[image] = HttpClient().post(config.IMG_URL, {
+                        "type": 1,
+                        "content": img_64.decode()
+                    })
         return json.dumps(tags)
 
-    def extract_img(self):
-        img_64 = base64.b64encode(open(self.file, 'rb').read())
+    def extract_img(self, file=''):
+        if file == '':
+            file = self.file
+        img_64 = base64.b64encode(open(file, 'rb').read())
         return json.dumps(HttpClient().post(config.IMG_URL, {
             "type": 1,
             "content": img_64.decode()
         }))
 
-    def extract_doc(self):
+    def extract_doc(self, file=''):
+        if file == '':
+            file = self.file
         fileTagLoader = WorldsToWord()
         return json.dumps(dict(fileTagLoader.handle(self.file)))  # TODO::类型问题 稍后会同步
 
