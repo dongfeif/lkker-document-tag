@@ -16,7 +16,7 @@ class ExtractFile:
     def handle(self):
         if self.file.endswith((".jpg", '.peg', '.png', '.jpeg')):
             return self.extract_img()
-        elif self.file.endswith((".pdf", ".words", "xls", "ptx", "doc", "psx", "ppt")):
+        elif self.file.endswith((".pdf", ".words", "xls", "ptx", "doc", "psx", "ppt", "xlsx")):
             return self.extract_doc()
         elif self.file.endswith((".zip")):
             return self.extract_zip()
@@ -57,5 +57,5 @@ class ExtractFile:
         if file == '':
             file = self.file
         fileTagLoader = WorldsToWord()
-        return json.dumps(dict(fileTagLoader.handle(self.file)))  # TODO::类型问题 稍后会同步
+        return json.dumps(fileTagLoader.handle(self.file))  # TODO::类型问题 稍后会同步
 
